@@ -3,31 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
-const kThemeModeKey = '__theme_mode__';
-SharedPreferences? _prefs;
+enum DeviceSize {
+  mobile,
+  tablet,
+  desktop,
+}
 
 abstract class FlutterFlowTheme {
-  static Future initialize() async =>
-      _prefs = await SharedPreferences.getInstance();
-  static ThemeMode get themeMode {
-    final darkMode = _prefs?.getBool(kThemeModeKey);
-    return darkMode == null
-        ? ThemeMode.system
-        : darkMode
-            ? ThemeMode.dark
-            : ThemeMode.light;
-  }
-
-  static void saveThemeMode(ThemeMode mode) => mode == ThemeMode.system
-      ? _prefs?.remove(kThemeModeKey)
-      : _prefs?.setBool(kThemeModeKey, mode == ThemeMode.dark);
+  static DeviceSize deviceSize = DeviceSize.mobile;
 
   static FlutterFlowTheme of(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? DarkModeTheme()
-        : LightModeTheme();
+    deviceSize = getDeviceSize(context);
+    return LightModeTheme();
   }
 
   @Deprecated('Use primary instead')
@@ -55,7 +42,12 @@ abstract class FlutterFlowTheme {
   late Color info;
 
   late Color lightGrey2;
-  late Color darkGrey;
+  late Color darkGrey2;
+  late Color grey;
+  late Color purple;
+  late Color primaryBtnText;
+  late Color lineColor;
+  late Color noColor;
 
   @Deprecated('Use displaySmallFamily instead')
   String get title1Family => displaySmallFamily;
@@ -117,7 +109,22 @@ abstract class FlutterFlowTheme {
   String get bodySmallFamily => typography.bodySmallFamily;
   TextStyle get bodySmall => typography.bodySmall;
 
-  Typography get typography => ThemeTypography(this);
+  Typography get typography => {
+        DeviceSize.mobile: MobileTypography(this),
+        DeviceSize.tablet: TabletTypography(this),
+        DeviceSize.desktop: DesktopTypography(this),
+      }[deviceSize]!;
+}
+
+DeviceSize getDeviceSize(BuildContext context) {
+  final width = MediaQuery.sizeOf(context).width;
+  if (width < 479) {
+    return DeviceSize.mobile;
+  } else if (width < 991) {
+    return DeviceSize.tablet;
+  } else {
+    return DeviceSize.desktop;
+  }
 }
 
 class LightModeTheme extends FlutterFlowTheme {
@@ -128,25 +135,30 @@ class LightModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFF4B39EF);
-  late Color secondary = const Color(0xFF39D2C0);
-  late Color tertiary = const Color(0xFFEE8B60);
+  late Color primary = const Color(0xFF232333);
+  late Color secondary = const Color(0xFF7A85A1);
+  late Color tertiary = const Color(0xFFFFD25F);
   late Color alternate = const Color(0xFFE0E3E7);
-  late Color primaryText = const Color(0xFF14181B);
+  late Color primaryText = const Color(0xFF1A1A24);
   late Color secondaryText = const Color(0xFF57636C);
-  late Color primaryBackground = const Color(0xFFF1F4F8);
+  late Color primaryBackground = const Color(0xFFF2F6FC);
   late Color secondaryBackground = const Color(0xFFFFFFFF);
-  late Color accent1 = const Color(0x4C4B39EF);
-  late Color accent2 = const Color(0x4D39D2C0);
-  late Color accent3 = const Color(0x4DEE8B60);
-  late Color accent4 = const Color(0xCCFFFFFF);
-  late Color success = const Color(0xFF249689);
-  late Color warning = const Color(0xFFF9CF58);
-  late Color error = const Color(0xFFFF5963);
-  late Color info = const Color(0xFFFFFFFF);
+  late Color accent1 = const Color(0xFFD1AB98);
+  late Color accent2 = const Color(0xFFBF886D);
+  late Color accent3 = const Color(0xFF652302);
+  late Color accent4 = const Color(0xFF581F02);
+  late Color success = const Color(0xFF03D691);
+  late Color warning = const Color(0xFFFFD25F);
+  late Color error = const Color(0xFFFF3B5E);
+  late Color info = const Color(0xFF1D91FF);
 
   late Color lightGrey2 = Color(0xFFE0E6F3);
-  late Color darkGrey = Color(0xFF7A85A1);
+  late Color darkGrey2 = Color(0xFF2C2E41);
+  late Color grey = Color(0xFF9DA8C3);
+  late Color purple = Color(0xFF6C64F0);
+  late Color primaryBtnText = Color(0xFFFFFFFF);
+  late Color lineColor = Color(0xFFE0E3E7);
+  late Color noColor = Color(0x00FFFFFF);
 }
 
 abstract class Typography {
@@ -182,145 +194,340 @@ abstract class Typography {
   TextStyle get bodySmall;
 }
 
-class ThemeTypography extends Typography {
-  ThemeTypography(this.theme);
+class MobileTypography extends Typography {
+  MobileTypography(this.theme);
 
   final FlutterFlowTheme theme;
 
-  String get displayLargeFamily => 'Outfit';
+  String get displayLargeFamily => 'Be Vietnam Pro';
   TextStyle get displayLarge => GoogleFonts.getFont(
-        'Outfit',
+        'Be Vietnam Pro',
         color: theme.primaryText,
-        fontWeight: FontWeight.normal,
-        fontSize: 64.0,
+        fontWeight: FontWeight.w300,
+        fontSize: 97.0,
       );
-  String get displayMediumFamily => 'Outfit';
+  String get displayMediumFamily => 'Be Vietnam Pro';
   TextStyle get displayMedium => GoogleFonts.getFont(
-        'Outfit',
+        'Be Vietnam Pro',
         color: theme.primaryText,
-        fontWeight: FontWeight.normal,
-        fontSize: 44.0,
+        fontWeight: FontWeight.w300,
+        fontSize: 61.0,
       );
-  String get displaySmallFamily => 'Outfit';
+  String get displaySmallFamily => 'Be Vietnam Pro';
   TextStyle get displaySmall => GoogleFonts.getFont(
-        'Outfit',
-        color: theme.primaryText,
-        fontWeight: FontWeight.w600,
-        fontSize: 36.0,
-      );
-  String get headlineLargeFamily => 'Outfit';
-  TextStyle get headlineLarge => GoogleFonts.getFont(
-        'Outfit',
-        color: theme.primaryText,
-        fontWeight: FontWeight.w600,
-        fontSize: 32.0,
-      );
-  String get headlineMediumFamily => 'Outfit';
-  TextStyle get headlineMedium => GoogleFonts.getFont(
-        'Outfit',
+        'Be Vietnam Pro',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
+        fontSize: 48.0,
+      );
+  String get headlineLargeFamily => 'Be Vietnam Pro';
+  TextStyle get headlineLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 34.0,
+      );
+  String get headlineMediumFamily => 'Be Vietnam Pro';
+  TextStyle get headlineMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
         fontSize: 24.0,
       );
-  String get headlineSmallFamily => 'Outfit';
+  String get headlineSmallFamily => 'Be Vietnam Pro';
   TextStyle get headlineSmall => GoogleFonts.getFont(
-        'Outfit',
+        'Be Vietnam Pro',
         color: theme.primaryText,
         fontWeight: FontWeight.w500,
-        fontSize: 24.0,
+        fontSize: 20.0,
       );
-  String get titleLargeFamily => 'Outfit';
+  String get titleLargeFamily => 'Be Vietnam Pro';
   TextStyle get titleLarge => GoogleFonts.getFont(
-        'Outfit',
+        'Be Vietnam Pro',
         color: theme.primaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.bold,
         fontSize: 22.0,
       );
-  String get titleMediumFamily => 'Readex Pro';
+  String get titleMediumFamily => 'Be Vietnam Pro';
   TextStyle get titleMedium => GoogleFonts.getFont(
-        'Readex Pro',
-        color: theme.info,
-        fontWeight: FontWeight.normal,
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w600,
         fontSize: 18.0,
       );
-  String get titleSmallFamily => 'Readex Pro';
+  String get titleSmallFamily => 'Be Vietnam Pro';
   TextStyle get titleSmall => GoogleFonts.getFont(
-        'Readex Pro',
-        color: theme.info,
+        'Be Vietnam Pro',
+        color: theme.primaryText,
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
       );
-  String get labelLargeFamily => 'Readex Pro';
+  String get labelLargeFamily => 'Be Vietnam Pro';
   TextStyle get labelLarge => GoogleFonts.getFont(
-        'Readex Pro',
+        'Be Vietnam Pro',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
-  String get labelMediumFamily => 'Readex Pro';
+  String get labelMediumFamily => 'Be Vietnam Pro';
   TextStyle get labelMedium => GoogleFonts.getFont(
-        'Readex Pro',
+        'Be Vietnam Pro',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get labelSmallFamily => 'Readex Pro';
+  String get labelSmallFamily => 'Be Vietnam Pro';
   TextStyle get labelSmall => GoogleFonts.getFont(
-        'Readex Pro',
+        'Be Vietnam Pro',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
       );
-  String get bodyLargeFamily => 'Readex Pro';
+  String get bodyLargeFamily => 'Be Vietnam Pro';
   TextStyle get bodyLarge => GoogleFonts.getFont(
-        'Readex Pro',
+        'Be Vietnam Pro',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
-  String get bodyMediumFamily => 'Readex Pro';
+  String get bodyMediumFamily => 'Be Vietnam Pro';
   TextStyle get bodyMedium => GoogleFonts.getFont(
-        'Readex Pro',
+        'Be Vietnam Pro',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get bodySmallFamily => 'Readex Pro';
+  String get bodySmallFamily => 'Be Vietnam Pro';
   TextStyle get bodySmall => GoogleFonts.getFont(
-        'Readex Pro',
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 10.0,
+      );
+}
+
+class TabletTypography extends Typography {
+  TabletTypography(this.theme);
+
+  final FlutterFlowTheme theme;
+
+  String get displayLargeFamily => 'Be Vietnam Pro';
+  TextStyle get displayLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w300,
+        fontSize: 97.0,
+      );
+  String get displayMediumFamily => 'Be Vietnam Pro';
+  TextStyle get displayMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w300,
+        fontSize: 61.0,
+      );
+  String get displaySmallFamily => 'Be Vietnam Pro';
+  TextStyle get displaySmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 48.0,
+      );
+  String get headlineLargeFamily => 'Be Vietnam Pro';
+  TextStyle get headlineLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 34.0,
+      );
+  String get headlineMediumFamily => 'Be Vietnam Pro';
+  TextStyle get headlineMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 24.0,
+      );
+  String get headlineSmallFamily => 'Be Vietnam Pro';
+  TextStyle get headlineSmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 20.0,
+      );
+  String get titleLargeFamily => 'Be Vietnam Pro';
+  TextStyle get titleLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 22.0,
+      );
+  String get titleMediumFamily => 'Be Vietnam Pro';
+  TextStyle get titleMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.info,
+        fontWeight: FontWeight.normal,
+        fontSize: 18.0,
+      );
+  String get titleSmallFamily => 'Be Vietnam Pro';
+  TextStyle get titleSmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.info,
+        fontWeight: FontWeight.w500,
+        fontSize: 16.0,
+      );
+  String get labelLargeFamily => 'Be Vietnam Pro';
+  TextStyle get labelLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get labelMediumFamily => 'Be Vietnam Pro';
+  TextStyle get labelMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get labelSmallFamily => 'Be Vietnam Pro';
+  TextStyle get labelSmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
+  String get bodyLargeFamily => 'Be Vietnam Pro';
+  TextStyle get bodyLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get bodyMediumFamily => 'Be Vietnam Pro';
+  TextStyle get bodyMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get bodySmallFamily => 'Be Vietnam Pro';
+  TextStyle get bodySmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
       );
 }
 
-class DarkModeTheme extends FlutterFlowTheme {
-  @Deprecated('Use primary instead')
-  Color get primaryColor => primary;
-  @Deprecated('Use secondary instead')
-  Color get secondaryColor => secondary;
-  @Deprecated('Use tertiary instead')
-  Color get tertiaryColor => tertiary;
+class DesktopTypography extends Typography {
+  DesktopTypography(this.theme);
 
-  late Color primary = const Color(0xFF4B39EF);
-  late Color secondary = const Color(0xFF39D2C0);
-  late Color tertiary = const Color(0xFFEE8B60);
-  late Color alternate = const Color(0xFF262D34);
-  late Color primaryText = const Color(0xFFFFFFFF);
-  late Color secondaryText = const Color(0xFF95A1AC);
-  late Color primaryBackground = const Color(0xFF1D2428);
-  late Color secondaryBackground = const Color(0xFF14181B);
-  late Color accent1 = const Color(0x4C4B39EF);
-  late Color accent2 = const Color(0x4D39D2C0);
-  late Color accent3 = const Color(0x4DEE8B60);
-  late Color accent4 = const Color(0xB2262D34);
-  late Color success = const Color(0xFF249689);
-  late Color warning = const Color(0xFFF9CF58);
-  late Color error = const Color(0xFFFF5963);
-  late Color info = const Color(0xFFFFFFFF);
+  final FlutterFlowTheme theme;
 
-  late Color lightGrey2 = Color(0xFFBF1103);
-  late Color darkGrey = Color(0xFF78D9A1);
+  String get displayLargeFamily => 'Be Vietnam Pro';
+  TextStyle get displayLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w300,
+        fontSize: 97.0,
+      );
+  String get displayMediumFamily => 'Be Vietnam Pro';
+  TextStyle get displayMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w300,
+        fontSize: 61.0,
+      );
+  String get displaySmallFamily => 'Be Vietnam Pro';
+  TextStyle get displaySmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 48.0,
+      );
+  String get headlineLargeFamily => 'Be Vietnam Pro';
+  TextStyle get headlineLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 34.0,
+      );
+  String get headlineMediumFamily => 'Be Vietnam Pro';
+  TextStyle get headlineMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 24.0,
+      );
+  String get headlineSmallFamily => 'Be Vietnam Pro';
+  TextStyle get headlineSmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 20.0,
+      );
+  String get titleLargeFamily => 'Be Vietnam Pro';
+  TextStyle get titleLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.w500,
+        fontSize: 22.0,
+      );
+  String get titleMediumFamily => 'Be Vietnam Pro';
+  TextStyle get titleMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.info,
+        fontWeight: FontWeight.normal,
+        fontSize: 18.0,
+      );
+  String get titleSmallFamily => 'Be Vietnam Pro';
+  TextStyle get titleSmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.info,
+        fontWeight: FontWeight.w500,
+        fontSize: 16.0,
+      );
+  String get labelLargeFamily => 'Be Vietnam Pro';
+  TextStyle get labelLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get labelMediumFamily => 'Be Vietnam Pro';
+  TextStyle get labelMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get labelSmallFamily => 'Be Vietnam Pro';
+  TextStyle get labelSmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.secondaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
+  String get bodyLargeFamily => 'Be Vietnam Pro';
+  TextStyle get bodyLarge => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 16.0,
+      );
+  String get bodyMediumFamily => 'Be Vietnam Pro';
+  TextStyle get bodyMedium => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 14.0,
+      );
+  String get bodySmallFamily => 'Be Vietnam Pro';
+  TextStyle get bodySmall => GoogleFonts.getFont(
+        'Be Vietnam Pro',
+        color: theme.primaryText,
+        fontWeight: FontWeight.normal,
+        fontSize: 12.0,
+      );
 }
 
 extension TextStyleHelper on TextStyle {
