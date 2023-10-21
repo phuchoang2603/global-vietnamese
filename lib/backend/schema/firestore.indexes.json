@@ -1,0 +1,18 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "learnt_card",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "sr_group",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ]
+}

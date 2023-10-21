@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "788089873690",
+    "project_id": "global-vietnamese",
+    "storage_bucket": "global-vietnamese.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788089873690:android:5e94d40cd418d633be38a3",
+        "android_client_info": {
+          "package_name": "com.mycompany.globalvietnamese"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788089873690-4jua6kgimjbjmr4ofuuiic7347qdvr5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.globalvietnamese",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "788089873690-nl8hj7dnqea7g6omse80fdkbjjknvhdq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYam_nHk9u1_9uFQiAABGrpAkw2UMeqUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788089873690-nl8hj7dnqea7g6omse80fdkbjjknvhdq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "788089873690-2tbagsvot3fkmrlbb5evrq69nrsp89pg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.globalvietnamese"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
