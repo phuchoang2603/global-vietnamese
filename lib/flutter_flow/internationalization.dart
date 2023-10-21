@@ -162,10 +162,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': 'Search vocabulary ...',
       'fr': '',
     },
-    '6a40doml': {
-      'en': 'Option 1',
-      'fr': '',
-    },
     'v3bdgwrh': {
       'en': 'Search',
       'fr': '',

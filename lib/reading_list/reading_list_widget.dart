@@ -240,7 +240,6 @@ class _ReadingListWidgetState extends State<ReadingListWidget>
                                                   },
                                                   child: Container(
                                                     width: 150.0,
-                                                    height: 190.0,
                                                     decoration: BoxDecoration(
                                                       color: FlutterFlowTheme
                                                               .of(context)
@@ -289,12 +288,21 @@ class _ReadingListWidgetState extends State<ReadingListWidget>
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              Text(
-                                                                rowCategoryRecord
-                                                                    .name,
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleMedium,
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child: Text(
+                                                                  rowCategoryRecord
+                                                                      .name,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall,
+                                                                ),
                                                               ),
                                                               Text(
                                                                 FFLocalizations.of(
@@ -371,7 +379,7 @@ class _ReadingListWidgetState extends State<ReadingListWidget>
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 16.0, 0.0, 0.0),
+                                          0.0, 16.0, 0.0, 16.0),
                                       child:
                                           StreamBuilder<List<CategoryRecord>>(
                                         stream: queryCategoryRecord(),
@@ -487,22 +495,21 @@ class _ReadingListWidgetState extends State<ReadingListWidget>
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
-                                                        Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              wrapCategoryRecord
-                                                                  .name,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .labelLarge,
-                                                            ),
-                                                          ].divide(SizedBox(
-                                                              height: 8.0)),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      8.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: Text(
+                                                            wrapCategoryRecord
+                                                                .name,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .labelLarge,
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
@@ -777,8 +784,8 @@ class _ReadingListWidgetState extends State<ReadingListWidget>
                                                 wrapAlphabetRecordList =
                                                 snapshot.data!;
                                             return Wrap(
-                                              spacing: 16.0,
-                                              runSpacing: 16.0,
+                                              spacing: 10.0,
+                                              runSpacing: 10.0,
                                               alignment: WrapAlignment.start,
                                               crossAxisAlignment:
                                                   WrapCrossAlignment.start,
@@ -794,7 +801,10 @@ class _ReadingListWidgetState extends State<ReadingListWidget>
                                                     wrapAlphabetRecordList[
                                                         wrapIndex];
                                                 return Container(
-                                                  width: 142.0,
+                                                  width:
+                                                      MediaQuery.sizeOf(context)
+                                                              .width *
+                                                          0.4,
                                                   decoration: BoxDecoration(
                                                     color: FlutterFlowTheme.of(
                                                             context)

@@ -1,5 +1,4 @@
 import '/backend/backend.dart';
-import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -38,6 +37,7 @@ class _DictionaryAlphabetWidgetState extends State<DictionaryAlphabetWidget> {
     });
 
     _model.searchBarController ??= TextEditingController();
+    _model.searchBarFocusNode ??= FocusNode();
   }
 
   @override
@@ -122,88 +122,33 @@ class _DictionaryAlphabetWidgetState extends State<DictionaryAlphabetWidget> {
                         child: Stack(
                           alignment: AlignmentDirectional(1.0, 0.0),
                           children: [
-                            Autocomplete<String>(
-                              initialValue: TextEditingValue(),
-                              optionsBuilder: (textEditingValue) {
-                                if (textEditingValue.text == '') {
-                                  return const Iterable<String>.empty();
-                                }
-                                return dictionaryAlphabetCardsRecordList
-                                    .map((e) => e.wordVn)
-                                    .toList()
-                                    .where((option) {
-                                  final lowercaseOption = option.toLowerCase();
-                                  return lowercaseOption.contains(
-                                      textEditingValue.text.toLowerCase());
-                                });
-                              },
-                              optionsViewBuilder:
-                                  (context, onSelected, options) {
-                                return AutocompleteOptionsList(
-                                  textFieldKey: _model.searchBarKey,
-                                  textController: _model.searchBarController!,
-                                  options: options.toList(),
-                                  onSelected: onSelected,
-                                  textStyle:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  textHighlightStyle: TextStyle(),
-                                  elevation: 4.0,
-                                  optionBackgroundColor:
-                                      FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                  optionHighlightColor:
-                                      FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                  maxHeight: 200.0,
-                                );
-                              },
-                              onSelected: (String selection) {
-                                setState(() =>
-                                    _model.searchBarSelectedOption = selection);
-                                FocusScope.of(context).unfocus();
-                              },
-                              fieldViewBuilder: (
-                                context,
-                                textEditingController,
-                                focusNode,
-                                onEditingComplete,
-                              ) {
-                                _model.searchBarFocusNode = focusNode;
-                                _model.searchBarController =
-                                    textEditingController;
-                                return TextFormField(
-                                  key: _model.searchBarKey,
-                                  controller: textEditingController,
-                                  focusNode: focusNode,
-                                  onEditingComplete: onEditingComplete,
-                                  textInputAction: TextInputAction.search,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText:
-                                        FFLocalizations.of(context).getText(
-                                      '9pstk7lk' /* Search vocabulary ... */,
-                                    ),
-                                    labelStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                    errorBorder: InputBorder.none,
-                                    focusedErrorBorder: InputBorder.none,
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    prefixIcon: Icon(
-                                      Icons.search_outlined,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                    ),
-                                  ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  maxLines: null,
-                                  validator: _model.searchBarControllerValidator
-                                      .asValidator(context),
-                                );
-                              },
+                            TextFormField(
+                              controller: _model.searchBarController,
+                              focusNode: _model.searchBarFocusNode,
+                              textInputAction: TextInputAction.search,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelText: FFLocalizations.of(context).getText(
+                                  '9pstk7lk' /* Search vocabulary ... */,
+                                ),
+                                labelStyle:
+                                    FlutterFlowTheme.of(context).bodySmall,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                focusedErrorBorder: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.white,
+                                prefixIcon: Icon(
+                                  Icons.search_outlined,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                ),
+                              ),
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              maxLines: null,
+                              validator: _model.searchBarControllerValidator
+                                  .asValidator(context),
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
@@ -217,7 +162,11 @@ class _DictionaryAlphabetWidgetState extends State<DictionaryAlphabetWidget> {
                                           records
                                               .map(
                                                 (record) => TextSearchItem(
-                                                    record, [record.wordVn!]),
+                                                    record, [
+                                                  record.wordVn!,
+                                                  record.wordFr!,
+                                                  record.wordEn!
+                                                ]),
                                               )
                                               .toList(),
                                         )
@@ -301,6 +250,7 @@ class _DictionaryAlphabetWidgetState extends State<DictionaryAlphabetWidget> {
                                       snapshot.data!;
                                   return ListView.separated(
                                     padding: EdgeInsets.zero,
+                                    primary: false,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
                                     itemCount:
