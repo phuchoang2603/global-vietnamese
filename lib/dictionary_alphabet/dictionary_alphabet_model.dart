@@ -1,5 +1,4 @@
 import '/backend/backend.dart';
-import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -21,10 +20,8 @@ class DictionaryAlphabetModel
 
   final unfocusNode = FocusNode();
   // State field(s) for searchBar widget.
-  final searchBarKey = GlobalKey();
   FocusNode? searchBarFocusNode;
   TextEditingController? searchBarController;
-  String? searchBarSelectedOption;
   String? Function(BuildContext, String?)? searchBarControllerValidator;
   List<CardsRecord> simpleSearchResults = [];
 
@@ -35,6 +32,7 @@ class DictionaryAlphabetModel
   void dispose() {
     unfocusNode.dispose();
     searchBarFocusNode?.dispose();
+    searchBarController?.dispose();
   }
 
   /// Action blocks are added here.
